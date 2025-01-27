@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float _speed;
-    private float horizontalDir;
+    public float speed = 5;
+    private Vector2 _velocity;
     private Rigidbody2D _rb;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        horizontalDir = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
-        _rb.linearVelocity = new Vector2(horizontalDir * _speed * Time.deltaTime, _rb.linearVelocity.y);
+        _velocity = new Vector2(Input.GetAxis("Horizontal") * speed, 0);
+    }
+
+    private void FixedUpdate()
+    {
+        _rb.linearVelocity = new Vector2(_velocity.x, _rb.linearVelocityY + _velocity.y);
     }
 
 }
