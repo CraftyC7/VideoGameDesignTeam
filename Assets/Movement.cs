@@ -7,8 +7,8 @@ public class Movement : MonoBehaviour
 {
     public float _speed;
     private float horizontalDir;
-
     private Rigidbody2D _rb;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
