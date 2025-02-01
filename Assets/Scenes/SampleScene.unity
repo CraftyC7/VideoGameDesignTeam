@@ -509,7 +509,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -631,7 +631,7 @@ Transform:
   m_GameObject: {fileID: 1976428679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.11, y: 0.29, z: 0}
+  m_LocalPosition: {x: -0.12, y: 2.84, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -649,7 +649,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1895bb6f30934e4993c94d494e96fca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  topSpeed: 5
+  jumpForce: 10
+  moveAcc: 5
+  movePower: 1.1
 --- !u!1 &1992088913
 GameObject:
   m_ObjectHideFlags: 0
