@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     public float jumpForce = 5f;
     public float moveAcc = 0.2f;
     public float movePower = 1.1f;
+    public float friction = 3f;
     private float accel;
     private float decel;
     private bool _jump;
@@ -34,11 +35,20 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float maxSpeed = topSpeed * _moveDir;
-        float potSpeed = maxSpeed - _rb.linearVelocityX;
-        float acceleration = (Mathf.Abs(maxSpeed) > 0.01f) ? accel : decel;
-        float force = Mathf.Pow(Mathf.Abs(potSpeed) * acceleration, movePower) * Mathf.Sign(potSpeed);
-        _rb.AddForce(force * Vector2.right);
+        if (Math.Abs(_moveDir) > 0.01)
+        {
+            float maxSpeed = topSpeed * _moveDir;
+            float potSpeed = maxSpeed - _rb.linearVelocityX;
+            float acceleration = (Mathf.Abs(maxSpeed) > 0.01f) ? accel : decel;
+            float force = Mathf.Pow(Mathf.Abs(potSpeed) * acceleration, movePower) * Mathf.Sign(potSpeed);
+            _rb.AddForce(force * Vector2.right);
+        }
+        else
+        {
+
+            float frictionForce = friction * Mathf.Sign(-_rb.linearVelocityX);
+            _rb.AddForce(frictionForce * Vector2.right);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
