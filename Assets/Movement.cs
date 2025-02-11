@@ -14,6 +14,9 @@ public class Movement : MonoBehaviour
     public float jumpTime = 0.5f;
     public float wallSlide = 0.2f;
     public float wallPushForce = 5f;
+    private int wallHash = 0;
+    private int floorHash = 0;
+    private float gravityVal;
     private float airTime = 0f;
     private float accel;
     private float decel;
@@ -29,6 +32,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        gravityVal = _rb.gravityScale;
         accel = moveAcc;
         decel = -moveAcc;
     }
@@ -51,12 +55,15 @@ public class Movement : MonoBehaviour
         }
         else if (Input.GetButtonDown("Jump") && _onWall && !_onFloor) 
         {
-            _rb.gravityScale = 2;
+            _rb.gravityScale = gravityVal;
             _onWall = false;
             _jump = true;
             _isJumping = true;
             _timeSinceJump = 0;
-            _rb.linearVelocity = (-Mathf.Sign(_wallCollideVelocity) * wallPushForce) * Vector2.right;
+            _rb.linearVelocity = Vector2.zero;
+            _rb.AddForce((_wallCollideVelocity * wallPushForce) * Vector2.right);
+            print(_rb.linearVelocity);
+            //_rb.linearVelocity = (-Mathf.Sign(_wallCollideVelocity) * wallPushForce) * Vector2.right;
         }
 
         if ((!Input.GetButton("Jump") || _timeSinceJump > jumpTime) && _isJumping) {
@@ -88,12 +95,13 @@ public class Movement : MonoBehaviour
             _rb.gravityScale = 0f;
         }
         else {
-            _rb.gravityScale = 2;
+            _rb.gravityScale = gravityVal;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        /*
         if (collision.gameObject.CompareTag("Floor")) { _jump = false; _onFloor = true; }
         else if (collision.gameObject.CompareTag("Wall")) 
         {
@@ -102,11 +110,55 @@ public class Movement : MonoBehaviour
             }
             _onWall = true;
         }
+        */
+
+        Vector3 face = collision.GetContact(0).normal;
+
+        if (face == transform.up)
+        {
+            // Floor
+            _jump = false;
+            _onFloor = true;
+            floorHash = collision.gameObject.GetHashCode();
+        }
+        else if (face == transform.right || face == -transform.right) 
+        {
+            // Wall
+            _onWall = true;
+            if (face == transform.right) 
+            {
+                _wallCollideVelocity = 1;
+            }
+            else if (face == -transform.right)
+            {
+                _wallCollideVelocity = -1;
+            }
+            else
+            {
+                print("Fail");
+            }
+            wallHash = collision.gameObject.GetHashCode();
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall")) { _onWall = false; } 
-        else if (collision.gameObject.CompareTag("Floor")) { _onFloor = false; }
+        // if (collision.gameObject.CompareTag("Wall")) { _onWall = false; } 
+        // else if (collision.gameObject.CompareTag("Floor")) { _onFloor = false; }
+
+        int objHash = collision.gameObject.GetHashCode();
+
+        if (objHash == floorHash)
+        {
+            // Floor
+            _onFloor = false;
+        }
+        else if (objHash == wallHash)
+        {
+            // Wall
+            _onWall = false;
+        }
+
+
     }
 }
