@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 public class Movement : MonoBehaviour
@@ -14,6 +15,10 @@ public class Movement : MonoBehaviour
     public float jumpTime = 0.5f;
     public float wallSlide = 0.2f;
     public float wallPushForce = 5f;
+    public float airJumpThreshold = 0.1f;
+    public KeyCode left = KeyCode.A;
+    public KeyCode right = KeyCode.D;
+    public KeyCode up = KeyCode.W;
     private int wallHash = 0;
     private int floorHash = 0;
     private float gravityVal;
@@ -39,7 +44,7 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        _moveDir = Input.GetAxis("Horizontal");
+        _moveDir = (Input.GetKey(right) ? 1 : 0) - (Input.GetKey(left) ? 1 : 0);
         _timeSinceJump += Time.deltaTime;
 
         if (_onFloor && _onWall)
@@ -47,13 +52,22 @@ public class Movement : MonoBehaviour
             _onWall = false;
         }
 
-        if (Input.GetButtonDown("Jump") && !_jump && Math.Abs(_rb.linearVelocityY) < 0.01)
+        if (!_onFloor && !_onWall)
+        {
+            airTime += Time.deltaTime;
+        }
+        else
+        {
+            airTime = 0f;
+        }
+
+        if (Input.GetKeyDown(up) && !_jump && (_onFloor || (!_onFloor && airTime <= airJumpThreshold))) 
         {
             _jump = true;
             _isJumping = true;
             _timeSinceJump = 0;
         }
-        else if (Input.GetButtonDown("Jump") && _onWall && !_onFloor) 
+        else if (Input.GetKeyDown(up) && _onWall && !_onFloor) 
         {
             _rb.gravityScale = gravityVal;
             _onWall = false;
@@ -62,13 +76,14 @@ public class Movement : MonoBehaviour
             _timeSinceJump = 0;
             _rb.linearVelocity = Vector2.zero;
             _rb.AddForce((_wallCollideVelocity * wallPushForce) * Vector2.right);
-            print(_rb.linearVelocity);
-            //_rb.linearVelocity = (-Mathf.Sign(_wallCollideVelocity) * wallPushForce) * Vector2.right;
         }
 
-        if ((!Input.GetButton("Jump") || _timeSinceJump > jumpTime) && _isJumping) {
+        if ((!Input.GetKey(up) || _timeSinceJump > jumpTime) && _isJumping) 
+        {
             _isJumping = false;
-        } else if (Input.GetButton("Jump") && _timeSinceJump <= jumpTime && _isJumping) {
+        } 
+        else if (Input.GetKey(up) && _timeSinceJump <= jumpTime && _isJumping) 
+        {
             _rb.linearVelocity = new Vector2(_rb.linearVelocityX, jumpForce);
         }
     }
@@ -101,17 +116,6 @@ public class Movement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        /*
-        if (collision.gameObject.CompareTag("Floor")) { _jump = false; _onFloor = true; }
-        else if (collision.gameObject.CompareTag("Wall")) 
-        {
-            if (!_onWall) {
-                _wallCollideVelocity = collision.relativeVelocity.x;
-            }
-            _onWall = true;
-        }
-        */
-
         Vector3 face = collision.GetContact(0).normal;
 
         if (face == transform.up)
@@ -133,19 +137,17 @@ public class Movement : MonoBehaviour
             {
                 _wallCollideVelocity = -1;
             }
-            else
-            {
-                print("Fail");
-            }
             wallHash = collision.gameObject.GetHashCode();
+        }
+        else if (face == -transform.up)
+        {
+            _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
+            _isJumping = false;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // if (collision.gameObject.CompareTag("Wall")) { _onWall = false; } 
-        // else if (collision.gameObject.CompareTag("Floor")) { _onFloor = false; }
-
         int objHash = collision.gameObject.GetHashCode();
 
         if (objHash == floorHash)
