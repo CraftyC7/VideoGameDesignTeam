@@ -2471,7 +2471,7 @@ Transform:
   m_GameObject: {fileID: 2107346656}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.63, y: 1.1, z: 0}
+  m_LocalPosition: {x: -6, y: -3, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2489,8 +2489,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e61544484678d44d9c7934b32f344dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathPoints:
+  - {x: -6, y: -3}
+  - {x: -6, y: 2}
   sameTime: 0
-  speed: 0.2
+  speed: 0.1
   timeBetween: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
