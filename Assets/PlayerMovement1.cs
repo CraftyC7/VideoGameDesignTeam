@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour
     public float wallSlide = 0.2f;
     public float wallPushForce = 5f;
     public float airJumpThreshold = 0.1f;
+    public float wallHoldForce = 0.5f;
     public KeyCode left = KeyCode.A;
     public KeyCode right = KeyCode.D;
     public KeyCode up = KeyCode.W;
@@ -61,7 +62,7 @@ public class Movement : MonoBehaviour
             airTime = 0f;
         }
 
-        if (Input.GetKeyDown(up) && !_jump && (_onFloor || (!_onFloor && airTime <= airJumpThreshold))) 
+        if (Input.GetKeyDown(up) && !_onWall && !_jump && (_onFloor || (!_onFloor && airTime <= airJumpThreshold))) 
         {
             _jump = true;
             _isJumping = true;
@@ -108,6 +109,7 @@ public class Movement : MonoBehaviour
         {
             _rb.linearVelocity = wallSlide * Vector2.up;
             _rb.gravityScale = 0f;
+            _rb.AddForce(wallHoldForce * -_wallCollideVelocity * Vector2.right);
         }
         else {
             _rb.gravityScale = gravityVal;
@@ -118,31 +120,40 @@ public class Movement : MonoBehaviour
     {
         Vector3 face = collision.GetContact(0).normal;
 
-        if (face == transform.up)
+        if (!collision.collider.CompareTag("Hazard"))
         {
-            // Floor
-            _jump = false;
-            _onFloor = true;
-            floorHash = collision.gameObject.GetHashCode();
-        }
-        else if (face == transform.right || face == -transform.right) 
-        {
-            // Wall
-            _onWall = true;
-            if (face == transform.right) 
+            if (face == transform.up)
             {
-                _wallCollideVelocity = 1;
+                // Floor
+                _jump = false;
+                _onFloor = true;
+                floorHash = collision.gameObject.GetHashCode();
             }
-            else if (face == -transform.right)
+            else if (face == transform.right || face == -transform.right)
             {
-                _wallCollideVelocity = -1;
+                // Wall
+                _onWall = true;
+                if (face == transform.right)
+                {
+                    _wallCollideVelocity = 1;
+                }
+                else if (face == -transform.right)
+                {
+                    _wallCollideVelocity = -1;
+                }
+                wallHash = collision.gameObject.GetHashCode();
             }
-            wallHash = collision.gameObject.GetHashCode();
-        }
-        else if (face == -transform.up)
+            else if (face == -transform.up)
+            {
+                _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
+                _isJumping = false;
+            }
+        } 
+        else
         {
-            _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
-            _isJumping = false;
+            _onFloor = false;
+            _onWall = false;
+            airTime += airJumpThreshold + 0.1f;
         }
     }
 
