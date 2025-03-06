@@ -4,10 +4,11 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Wall
-  - Floor
-  - Ceiling
   - Hazard
+  - Playable
+  - DestructingHazard
+  - NonCollideable
+  - NonHoldable
   layers:
   - Default
   - TransparentFX

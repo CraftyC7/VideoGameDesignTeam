@@ -25,5 +25,11 @@ public class Killable : MonoBehaviour
             transform.position = originalPosition;
             _rb.linearVelocity = Vector2.zero;
         }
+        else if (collision.collider.CompareTag("DestructingHazard"))
+        {
+            transform.position = originalPosition;
+            _rb.linearVelocity = Vector2.zero;
+            Destroy(collision.gameObject);
+        }
     }
 }

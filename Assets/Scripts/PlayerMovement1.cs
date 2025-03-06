@@ -16,7 +16,6 @@ public class Movement : MonoBehaviour
     public float wallSlide = 0.2f;
     public float wallPushForce = 5f;
     public float airJumpThreshold = 0.1f;
-    public float wallHoldForce = 0.5f;
     public KeyCode left = KeyCode.A;
     public KeyCode right = KeyCode.D;
     public KeyCode up = KeyCode.W;
@@ -109,7 +108,6 @@ public class Movement : MonoBehaviour
         {
             _rb.linearVelocity = wallSlide * Vector2.up;
             _rb.gravityScale = 0f;
-            _rb.AddForce(wallHoldForce * -_wallCollideVelocity * Vector2.right);
         }
         else {
             _rb.gravityScale = gravityVal;
@@ -120,7 +118,7 @@ public class Movement : MonoBehaviour
     {
         Vector3 face = collision.GetContact(0).normal;
 
-        if (!collision.collider.CompareTag("Hazard"))
+        if (!collision.collider.CompareTag("Hazard") && !collision.collider.CompareTag("DestructingHazard") && !collision.collider.CompareTag("NonCollideable"))
         {
             if (face == transform.up)
             {
@@ -129,7 +127,7 @@ public class Movement : MonoBehaviour
                 _onFloor = true;
                 floorHash = collision.gameObject.GetHashCode();
             }
-            else if (face == transform.right || face == -transform.right)
+            else if ((face == transform.right || face == -transform.right) && !collision.collider.CompareTag("NonHoldable"))
             {
                 // Wall
                 _onWall = true;
@@ -153,6 +151,7 @@ public class Movement : MonoBehaviour
         {
             _onFloor = false;
             _onWall = false;
+            _isJumping = false;
             airTime += airJumpThreshold + 0.1f;
         }
     }
@@ -166,7 +165,8 @@ public class Movement : MonoBehaviour
             // Floor
             _onFloor = false;
         }
-        else if (objHash == wallHash)
+        
+        if (objHash == wallHash)
         {
             // Wall
             _onWall = false;
