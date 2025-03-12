@@ -31,6 +31,7 @@ public class DoorObject : MonoBehaviour
         if (GlobalDoor.doorOpen && collision.gameObject.CompareTag("Playable"))
         {
             transition = true;
+            GlobalDoor.doorOpen = false;
         }
     }
 }
