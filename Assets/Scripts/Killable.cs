@@ -7,12 +7,14 @@ public class Killable : MonoBehaviour
     public int deathParticles = 30;
     private Rigidbody2D _rb;
     private ParticleSystem _ps;
+    private SpriteRenderer _sr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         originalPosition = transform.position;
         _rb = GetComponent<Rigidbody2D>();
         _ps = GetComponent<ParticleSystem>();
+        _sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -25,6 +27,7 @@ public class Killable : MonoBehaviour
     {
         if (collision.collider.CompareTag("Hazard") || collision.collider.CompareTag("DestructingHazard")) 
         {
+            _ps.startColor = _sr.color;
             _ps.Emit(deathParticles);
             transform.position = originalPosition;
             _rb.linearVelocity = Vector2.zero;

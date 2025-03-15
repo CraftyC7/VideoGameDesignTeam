@@ -5,6 +5,7 @@ public class Explodeable : MonoBehaviour
     public int explosionParticles = 20;
     private ParticleSystem _ps;
     private SpriteRenderer _sr;
+    private CircleCollider2D _cc;
     private bool _dead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -12,6 +13,7 @@ public class Explodeable : MonoBehaviour
     {
         _ps = GetComponent<ParticleSystem>();
         _sr = GetComponent<SpriteRenderer>();
+        _cc = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
@@ -33,6 +35,7 @@ public class Explodeable : MonoBehaviour
             }
         }
         _sr.enabled = false;
+        _cc.enabled = false;
         _dead = true;
     }
 }
