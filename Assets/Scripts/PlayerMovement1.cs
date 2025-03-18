@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour
     public float wallSlide = 0.2f;
     public float wallPushForce = 5f;
     public float airJumpThreshold = 0.1f;
+    public int moveParticles = 10;
     public KeyCode left = KeyCode.A;
     public KeyCode right = KeyCode.D;
     public KeyCode up = KeyCode.W;
@@ -33,10 +34,12 @@ public class Movement : MonoBehaviour
     private float _moveDir;
     private float _wallCollideVelocity;
     private Rigidbody2D _rb;
+    private ParticleSystem _ps;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _ps = GetComponent<ParticleSystem>();
         gravityVal = _rb.gravityScale;
         accel = moveAcc;
         decel = -moveAcc;
@@ -146,6 +149,7 @@ public class Movement : MonoBehaviour
                 _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
                 _isJumping = false;
             }
+
         } 
         else
         {
