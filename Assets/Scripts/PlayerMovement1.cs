@@ -20,6 +20,7 @@ public class Movement : MonoBehaviour
     public KeyCode left = KeyCode.A;
     public KeyCode right = KeyCode.D;
     public KeyCode up = KeyCode.W;
+    public AudioClip jumpSound;
     private int wallHash = 0;
     private int floorHash = 0;
     private float gravityVal;
@@ -35,11 +36,13 @@ public class Movement : MonoBehaviour
     private float _wallCollideVelocity;
     private Rigidbody2D _rb;
     private ParticleSystem _ps;
+    private AudioSource _as;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _ps = GetComponent<ParticleSystem>();
+        _as = GetComponent<AudioSource>();
         gravityVal = _rb.gravityScale;
         accel = moveAcc;
         decel = -moveAcc;
@@ -66,12 +69,16 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(up) && !_onWall && !_jump && (_onFloor || (!_onFloor && airTime <= airJumpThreshold))) 
         {
+            _as.clip = jumpSound;
+            _as.Play();
             _jump = true;
             _isJumping = true;
             _timeSinceJump = 0;
         }
         else if (Input.GetKeyDown(up) && _onWall && !_onFloor) 
         {
+            _as.clip = jumpSound;
+            _as.Play();
             _rb.gravityScale = gravityVal;
             _onWall = false;
             _jump = true;
