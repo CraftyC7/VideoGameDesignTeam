@@ -43,6 +43,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2185767695
+    locked: 0
+  - name: Slanted
+    uniqueID: 3886493203
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
