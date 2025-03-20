@@ -1200,6 +1200,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingPlatform
       objectReference: {fileID: 0}
+    - target: {fileID: 1540048342212882874, guid: 991f1c14588d105499d4b947c4ab75ff, type: 3}
+      propertyPath: pathPoints.Array.data[0].y
+      value: -8.875
+      objectReference: {fileID: 0}
     - target: {fileID: 3749595277511004606, guid: 991f1c14588d105499d4b947c4ab75ff, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

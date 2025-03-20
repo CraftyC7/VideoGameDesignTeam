@@ -21,6 +21,7 @@ public class Movement : MonoBehaviour
     public KeyCode right = KeyCode.D;
     public KeyCode up = KeyCode.W;
     public AudioClip jumpSound;
+    public AudioClip landSound;
     private int wallHash = 0;
     private int floorHash = 0;
     private float gravityVal;
@@ -108,7 +109,7 @@ public class Movement : MonoBehaviour
             float force = Mathf.Pow(Mathf.Abs(potSpeed) * acceleration, movePower) * Mathf.Sign(potSpeed);
             _rb.AddForce(force * Vector2.right);
         }
-        else
+        else if (!_onWall)
         {
             float frictionForce = friction * Mathf.Sign(-_rb.linearVelocityX);
             _rb.AddForce(frictionForce * Vector2.right);
@@ -156,6 +157,8 @@ public class Movement : MonoBehaviour
                 _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
                 _isJumping = false;
             }
+            _as.clip = landSound;
+            _as.Play();
 
         } 
         else

@@ -6,6 +6,7 @@ public class Explodeable : MonoBehaviour
     private ParticleSystem _ps;
     private SpriteRenderer _sr;
     private CircleCollider2D _cc;
+    private AudioSource _as;
     private bool _dead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,12 +15,13 @@ public class Explodeable : MonoBehaviour
         _ps = GetComponent<ParticleSystem>();
         _sr = GetComponent<SpriteRenderer>();
         _cc = GetComponent<CircleCollider2D>();
+        _as = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_dead && !_ps.IsAlive())
+        if (_dead && !_ps.IsAlive() &&!_as.isPlaying)
         {
             Destroy(gameObject);
         }
@@ -33,6 +35,7 @@ public class Explodeable : MonoBehaviour
             {
                 _ps.Emit(explosionParticles);
             }
+            _as.Play();
         }
         _sr.enabled = false;
         _cc.enabled = false;
