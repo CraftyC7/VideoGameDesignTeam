@@ -8,10 +8,4 @@ public class LoadScene : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-
-    // Update is called once per framej
-    public void LoadGame()
-    {
-        // Start game here
-    }
 }

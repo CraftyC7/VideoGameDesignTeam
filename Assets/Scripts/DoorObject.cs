@@ -16,6 +16,14 @@ public class DoorObject : MonoBehaviour
     void Start()
     {
         _as = GetComponent<AudioSource>();
+        if (GameManager.nextLevel >= GameManager.levelSequence.Length)
+        {
+            nextScene = 2;
+        }
+        else
+        {
+            nextScene = GameManager.levelSequence[GameManager.nextLevel];
+        }
     }
 
     // Update is called once per frame
@@ -23,6 +31,7 @@ public class DoorObject : MonoBehaviour
     {
         if (transition)
         {
+            GameManager.nextLevel++;
             SceneManager.LoadScene(nextScene);
         }
     }

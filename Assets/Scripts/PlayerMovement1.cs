@@ -157,8 +157,8 @@ public class Movement : MonoBehaviour
                 _rb.linearVelocity = new Vector2(_rb.linearVelocityX, 0);
                 _isJumping = false;
             }
-            _as.clip = landSound;
-            _as.Play();
+            //_as.clip = landSound;
+            //_as.Play();
 
         } 
         else
