@@ -9,13 +9,16 @@ public static class GlobalDoor
 public class DoorObject : MonoBehaviour
 {
     public int nextScene = 0;
+    public Sprite openSprite;
     private bool transition = false;
     private AudioSource _as;
+    private SpriteRenderer _sr;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _as = GetComponent<AudioSource>();
+        _sr = GetComponent<SpriteRenderer>();
         if (GameManager.nextLevel >= GameManager.levelSequence.Length)
         {
             nextScene = 2;
@@ -33,6 +36,11 @@ public class DoorObject : MonoBehaviour
         {
             GameManager.nextLevel++;
             SceneManager.LoadScene(nextScene);
+        }
+
+        if (GlobalDoor.doorOpen) 
+        {
+            _sr.sprite = openSprite;
         }
     }
 
