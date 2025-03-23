@@ -7,8 +7,6 @@ public class PathMovement : MonoBehaviour
     public float speed = 0.1f;
     public float timeBetween = 1.0f;
     private int _currentPoint = 0;
-    private float _timeOnPath = 0f;
-    private float _distCurrentPath = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

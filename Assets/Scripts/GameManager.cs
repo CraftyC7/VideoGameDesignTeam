@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public static int[] levelSequence;
     public static int nextLevel = 1;
+    public static int playerOnePoints = 0;
+    public static int playerTwoPoints = 0;
+    public static int pointsToWin = 3;
     public int levelAmount = 5;
     public int[] registeredLevels;
     private int[] tempRegistered;
@@ -46,17 +50,8 @@ public class GameManager : MonoBehaviour
     {
         GenerateLevelSequence();
         nextLevel = 1;
+        playerOnePoints = 0;
+        playerTwoPoints = 0;
         SceneManager.LoadScene(levelSequence[0]);
-    }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

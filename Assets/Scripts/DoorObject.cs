@@ -40,6 +40,23 @@ public class DoorObject : MonoBehaviour
     {
         if (GlobalDoor.doorOpen && collision.gameObject.CompareTag("Playable"))
         {
+            if (collision.gameObject.name == "Player1")
+            {
+                GameManager.playerOnePoints += 1;
+            }
+            else if (collision.gameObject.name == "Player2")
+            {
+                GameManager.playerTwoPoints += 1;
+            }
+
+            if (GameManager.playerOnePoints >= GameManager.pointsToWin || GameManager.playerTwoPoints >= GameManager.pointsToWin)
+            {
+                nextScene = 2;
+            }
+
+            Debug.Log("P1: " + GameManager.playerOnePoints);
+            Debug.Log("P2: " + GameManager.playerTwoPoints);
+
             _as.Play();
             transition = true;
             GlobalDoor.doorOpen = false;
