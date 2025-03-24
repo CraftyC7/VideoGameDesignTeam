@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,7 @@ public class DoorObject : MonoBehaviour
     public int nextScene = 0;
     public Sprite openSprite;
     private bool transition = false;
+    private bool hasTransitioned = false;
     private AudioSource _as;
     private SpriteRenderer _sr;
 
@@ -19,6 +21,7 @@ public class DoorObject : MonoBehaviour
     {
         _as = GetComponent<AudioSource>();
         _sr = GetComponent<SpriteRenderer>();
+
         if (GameManager.nextLevel >= GameManager.levelSequence.Length)
         {
             nextScene = 2;
@@ -32,10 +35,11 @@ public class DoorObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transition)
+        if (transition && !hasTransitioned)
         {
             GameManager.nextLevel++;
             GameManager.FadeScene(nextScene);
+            hasTransitioned = true;
         }
 
         if (GlobalDoor.doorOpen) 
@@ -46,7 +50,7 @@ public class DoorObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (GlobalDoor.doorOpen && collision.gameObject.CompareTag("Playable"))
+        if (GlobalDoor.doorOpen && collision.gameObject.CompareTag("Playable") && !transition)
         {
             if (collision.gameObject.name == "Player1")
             {
@@ -57,13 +61,10 @@ public class DoorObject : MonoBehaviour
                 GameManager.playerTwoPoints += 1;
             }
 
-            if (GameManager.playerOnePoints >= GameManager.pointsToWin || GameManager.playerTwoPoints >= GameManager.pointsToWin)
+            if ((GameManager.playerOnePoints >= GameManager.pointsToWin) || (GameManager.playerTwoPoints >= GameManager.pointsToWin))
             {
                 nextScene = 2;
             }
-
-            Debug.Log("P1: " + GameManager.playerOnePoints);
-            Debug.Log("P2: " + GameManager.playerTwoPoints);
 
             _as.Play();
             transition = true;
