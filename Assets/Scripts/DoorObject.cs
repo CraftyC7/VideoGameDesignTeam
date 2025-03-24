@@ -35,7 +35,7 @@ public class DoorObject : MonoBehaviour
         if (transition)
         {
             GameManager.nextLevel++;
-            SceneManager.LoadScene(nextScene);
+            GameManager.FadeScene(nextScene);
         }
 
         if (GlobalDoor.doorOpen) 
