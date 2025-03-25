@@ -13,13 +13,11 @@ public class DoorObject : MonoBehaviour
     public Sprite openSprite;
     private bool transition = false;
     private bool hasTransitioned = false;
-    private AudioSource _as;
     private SpriteRenderer _sr;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _as = GetComponent<AudioSource>();
         _sr = GetComponent<SpriteRenderer>();
 
         if (GameManager.nextLevel >= GameManager.levelSequence.Length)
@@ -66,7 +64,6 @@ public class DoorObject : MonoBehaviour
                 nextScene = 2;
             }
 
-            _as.Play();
             transition = true;
             GlobalDoor.doorOpen = false;
         }

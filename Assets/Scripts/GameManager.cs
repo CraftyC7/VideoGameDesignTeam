@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,10 +13,11 @@ public class GameManager : MonoBehaviour
     public static int nextLevel = 1;
     public static int playerOnePoints = 0;
     public static int playerTwoPoints = 0;
-    public static int pointsToWin = 3;
+    public static int pointsToWin = 5;
     public Image fade;
     public RawImage bluePoint;
     public RawImage redPoint;
+    public TextMeshProUGUI counter;
     public float fadeLength = 1f;
     public int levelAmount = 5;
     public Color inactive;
@@ -34,28 +36,13 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < bluePoints.Length; i++)
             {
                 bluePoints[i].gameObject.SetActive(true);
-                if (i < playerOnePoints)
-                {
-                    bluePoints[i].color = blue;
-                }
-                else
-                {
-                    bluePoints[i].color = inactive;
-                }
             }
 
             for (int i = 0; i < redPoints.Length; i++)
             {
                 redPoints[i].gameObject.SetActive(true);
-                if (i < playerTwoPoints)
-                {
-                    redPoints[i].color = red;
-                }
-                else
-                {
-                    redPoints[i].color = inactive;
-                }
             }
+            counter.gameObject.SetActive(true);
         }
         else
         {
@@ -68,6 +55,7 @@ public class GameManager : MonoBehaviour
             {
                 redPoints[i].gameObject.SetActive(false);
             }
+            counter.gameObject.SetActive(false);
         }
         StartCoroutine(FadeIn());
     }
@@ -92,6 +80,32 @@ public class GameManager : MonoBehaviour
         fade.color = new Color(0, 0, 0, 0);
     }
 
+    public void Update()
+    {
+        for (int i = 0; i < bluePoints.Length; i++)
+        {
+            if (i < playerOnePoints)
+            {
+                bluePoints[i].color = blue;
+            }
+            else
+            {
+                bluePoints[i].color = inactive;
+            }
+        }
+
+        for (int i = 0; i < redPoints.Length; i++)
+        {
+            if (i < playerTwoPoints)
+            {
+                redPoints[i].color = red;
+            }
+            else
+            {
+                redPoints[i].color = inactive;
+            }
+        }
+    }
     private IEnumerator FadeOut(int sceneBuild)
     {
         isFading = true;

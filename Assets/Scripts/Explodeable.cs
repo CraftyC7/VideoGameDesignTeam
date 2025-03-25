@@ -13,7 +13,7 @@ public class Explodeable : MonoBehaviour
     void Start()
     {
         _ps = GetComponent<ParticleSystem>();
-        _sr = GetComponentInChildren<SpriteRenderer>();
+        _sr = GetComponent<SpriteRenderer>();
         _cc = GetComponent<CircleCollider2D>();
         _as = GetComponent<AudioSource>();
     }
